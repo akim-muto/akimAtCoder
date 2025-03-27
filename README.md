@@ -11,18 +11,26 @@
 * wsl2
 * Ubuntu 24.04.1 LTS
 * npm
-* rye(pythonのパーケージマネージャ) [https://rye.astral.sh/]
-* vscode [https://code.visualstudio.com/]
-* ac-library [https://atcoder.jp/posts/517] (ライセンスがCC0 1.0 Universalだったのでこのリポジトリに含まれています)
-* atcoder-cli [https://github.com/Tatamo/atcoder-cli]
-* online-judge-tools/oj [https://github.com/online-judge-tools/oj]
+* uv(pythonのパーケージマネージャ) [<https://docs.astral.sh/uv/getting-started/installation/>]
+* vscode [<https://code.visualstudio.com/>]
+* ac-library [<https://atcoder.jp/posts/517>] (ライセンスがCC0 1.0 Universalだったのでこのリポジトリに含まれています)
+* atcoder-cli [<https://github.com/Tatamo/atcoder-cli>]
+* online-judge-tools/oj [<https://github.com/online-judge-tools/oj>]
 
 ToDo：
 
+- [x] pythonのパーケージマネージャをuvに変更
+  - [x] readmeを変更
+- [ ] setup scriptを制作
+  - [ ] <https://github.com/akim-muto/akimAtCoder.git>をクローン
+  - [ ] uvをインストール
+  - [ ] uvをプロジェクトでイニシャライズ
+  - [ ] online-judge-toolsをインストール
+  - [ ] npmをインストール
+  - [ ] atcoder-cliをインストール
+  - [ ] atcoder-cliをイニシャライズ
+- [ ] atcoder-cliのコンフィグgit repを作る
+- [ ] 導入方法をreadmeに追記
+- [ ] readmeの英語版を製作
 - [ ] コマンドを設定する
 - [ ] ショートカットキーを設定する
-- [ ] atcoder-cliのコンフィグgit repを作る
-- [ ] setup scriptを制作
-- [ ] 導入方法をreadmeに追記
-- [ ] readmeのレイアウトなどを整理
-- [ ] readmeの英語版を製作
