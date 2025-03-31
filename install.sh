@@ -10,6 +10,9 @@
 set -euo pipefail
 IFS=$'\n\t'
 
+# Use package manager Flag
+pm=0
+
 # ログ出力用関数
 log_info() {
     echo "[INFO] $(date '+%Y-%m-%d %H:%M:%S') - $*"
@@ -19,7 +22,7 @@ log_error() {
     echo "[ERROR] $(date '+%Y-%m-%d %H:%M:%S') - $*" >&2
 }
 
-# ヘルプメッセージの表示
+# display the help
 usage() {
     echo "Usage: $0 [options]"
     echo "Options:"
@@ -27,11 +30,14 @@ usage() {
     exit 1
 }
 
-# コマンドライン引数の処理
+# arg processing
 while [[ "${1:-}" != "" ]]; do
     case $1 in
         -h | --help )
             usage
+            ;;
+        --pm)
+            pm=1
             ;;
         *)
             log_error "不明なオプション: $1"
@@ -41,41 +47,98 @@ while [[ "${1:-}" != "" ]]; do
     shift
 done
 
-# このスクリプトは root 権限で実行する必要があります
 if [[ $EUID -ne 0 ]]; then
-    log_error "このスクリプトは root 権限で実行してください。"
+    log_error "Please root user. You can use sudo."
     exit 1
 fi
 
-# Ubuntu のバージョン確認 (任意)
+# Check Ubuntu Version
 UBUNTU_VERSION=$(lsb_release -rs)
 log_info "Ubuntu バージョン: $UBUNTU_VERSION"
 
-# システムパッケージの更新・アップグレード
-log_info "システムパッケージの更新を開始します..."
+log_info "Update package..."
 apt update && apt upgrade -y
 
-# 必要なパッケージのインストール
-# 例として Nginx、Git、curl をインストールします。用途に合わせてパッケージを追加してください。
-log_info "必要なパッケージのインストールを開始します..."
-apt install -y nginx git curl
+log_info "Start Install related package..."
+apt install -y git build-essential gcc g++ curl
+echo "Done"
 
-# Nginx サービスの起動と自動起動設定
-log_info "Nginx サービスの起動と自動起動設定を行います..."
-systemctl start nginx
-systemctl enable nginx
+# Check nodejs and npm
+if ! command -v node >/dev/null 2>&1 || ! command -v npm >/dev/null 2>&1; then
+    echo "Not available nodejs and npm"
+  
+    if [ "$pm" -eq 1 ]; then
+        echo "Use pm Flag On"
+        echo "Install NVM..."
+        curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.11/install.sh | bash
+        
+        # Activate NVM on current bash session
+        export NVM_DIR="$HOME/.nvm"
+        [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+        
+        echo "Install nodejs and npm..."
+        nvm install stable
 
-# ファイアウォールの設定 (例: UFW を使用して Nginx のアクセスを許可)
-if command -v ufw >/dev/null 2>&1; then
-    log_info "UFW がインストールされています。ファイアウォールの設定を行います..."
-    ufw allow 'Nginx Full'
-    ufw --force enable
-else
-    log_info "UFW がインストールされていません。必要に応じて別途ファイアウォール設定を行ってください。"
+        echo "done"
+    else
+        
+        echo "Install nodejs and npm..."
+        apt install nodejs npm
+
+        echo "done"
+    fi
+
 fi
 
-# ユーザー定義のカスタム設定
-# ここに Web サーバー用の設定ファイルの配置や SSL 証明書の取得、その他初期設定を追加してください。
+echo "install atcoder-cli"
+npm install -g atcoder-cli
+echo "Done"
+
+# Check python
+if ! command -v /usr/local/bin/python3 >/dev/null 2>&1; then
+    echo "Not available python"
+  
+    if [ "$pm" -eq 1 ]; then
+        echo "Use pm Flag On"
+        echo "Install UV..."
+
+        curl -LsSf https://astral.sh/uv/install.sh | bash
+        
+        # Activate NVM on current bash session
+        export UV_DIR="$HOME/.local/bin"
+        [ -s "$UV_DIR/env" ] && \. "$UV_DIR/env"
+
+        # add uv shell completion
+        uv generate-shell-completion
+
+        echo "done"
+    else
+        echo "Install python3..."
+        sudo apt install python3
+        echo "done"
+    fi
+
+fi
+
+# Clone akimAtCoder rep
+git clone https://github.com/akim-muto/akimAtCoder.git
+
+cd akimAtCoder
+
+if [ "$pm" -eq 1 ]; then
+        echo "Use pm Flag On"
+        echo "Install online-judge-tools..."
+
+        uv sync
+
+        echo "done"
+else
+    echo "Install online-judge-tools..."
+
+    pip3 install online-judge-tools
+
+    echo "done"
+fi 
 
 log_info "インストールと初期設定が完了しました。"
 exit 0

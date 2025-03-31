@@ -22,12 +22,12 @@ ToDo：
 - [x] pythonのパーケージマネージャをuvに変更
   - [x] readmeを変更
 - [ ] setup scriptを制作
-  - [ ] <https://github.com/akim-muto/akimAtCoder.git>をクローン
-  - [ ] uvをインストール
-  - [ ] uvをプロジェクトでイニシャライズ
-  - [ ] online-judge-toolsをインストール
-  - [ ] npmをインストール
-  - [ ] atcoder-cliをインストール
+  - [x] <https://github.com/akim-muto/akimAtCoder.git>をクローン
+  - [x] uvをインストール
+  - [x] uvをプロジェクトでイニシャライズ
+  - [x] online-judge-toolsをインストール
+  - [x] npmをインストール
+  - [x] atcoder-cliをインストール
   - [ ] atcoder-cliをイニシャライズ
 - [ ] atcoder-cliのコンフィグgit repを作る
 - [ ] 導入方法をreadmeに追記
